@@ -1,0 +1,65 @@
+name: JAR with Dependencies Build
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  verify:
+    name: Verify project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Verify with Maven
+        run: mvn --batch-mode --update-snapshots verify
+
+
+  build-to-fat-jar:
+    needs: verify
+    name: Build on ${{ matrix.os.name }} to fat jar
+    runs-on: ${{ matrix.os.name }}
+    strategy:
+      matrix:
+        os: [
+          { name: ubuntu-latest },
+          { name: windows-latest }
+        ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Prepare project
+        run: |
+          rm src/main/java/module-info.java
+
+      - name: Build with Maven
+        run: |
+          mvn -P fat-jar --batch-mode --update-snapshots clean install package
+
+      - name: Upload binary to release
+        uses: svenstaro/upload-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/fx-demo.jar
+          asset_name: fx-demo_${{ matrix.os.name }}.jar
+          overwrite: true
+          tag: jar
+          release_name: jar with dependencies

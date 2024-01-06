@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+echo "Running postrm for fx-demo with $1"
+if [ "$1" = 'remove' ]; then
+  # remove the installation folder
+  rm -r /opt/fx-demo/
+  # remove the link in /bin
+  rm /bin/fx-demo
+fi
+
+exit 0
