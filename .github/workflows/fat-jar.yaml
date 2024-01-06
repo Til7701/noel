@@ -1,10 +1,9 @@
-name: JAR with Dependencies Build
+name: JAR with Dependencies Development Build
 
 on:
   push:
     branches:
-      - master
-
+      - develop
 
 jobs:
   verify:
@@ -31,8 +30,8 @@ jobs:
     strategy:
       matrix:
         os: [
-          { name: ubuntu-latest },
-          { name: windows-latest }
+          { name: ubuntu-latest, file-mod: "linux" },
+          { name: windows-latest, file-mod: "win" }
         ]
     steps:
       - uses: actions/checkout@v4
@@ -58,8 +57,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/fx-demo.jar
-          asset_name: fx-demo_${{ matrix.os.name }}.jar
+          file: target/noel.jar
+          asset_name: noel-${{ matrix.os.file-mod }}.jar
           overwrite: true
-          tag: jar
+          tag: dev-jar
+          prerelease: true
           release_name: jar with dependencies

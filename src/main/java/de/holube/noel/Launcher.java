@@ -1,9 +1,9 @@
-package de.holube.demo;
+package de.holube.noel;
 
 public class Launcher {
 
     public static void main(String[] args) {
-        MyApplication.main(args);
+        NoelApplication.main(args);
     }
 
 }

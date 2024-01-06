@@ -1,6 +1,6 @@
-package de.holube.demo;
+package de.holube.noel;
 
-import de.holube.demo.fx.view.MainView;
+import de.holube.noel.fx.view.MainView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,11 +10,10 @@ import java.awt.*;
 import java.awt.Taskbar.Feature;
 import java.util.Arrays;
 
-public class MyApplication extends Application {
+public class NoelApplication extends Application {
 
     public static void main(String[] args) {
         System.out.println(Arrays.toString(args));
-        System.setProperty("javafx.preloader", "de.holube.demo.MyPreloader");
         launch(args);
     }
 
@@ -23,7 +22,7 @@ public class MyApplication extends Application {
         setupIcons(primaryStage);
         MainView mainView = new MainView();
         Scene scene = new Scene(mainView, 320, 240);
-        primaryStage.setTitle("Demo");
+        primaryStage.setTitle("NoEl");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

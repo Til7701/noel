@@ -1,10 +1,9 @@
-name: Native Image Build
+name: Native Image Development Build
 
 on:
   push:
     branches:
-      - master
-
+      - develop
 
 jobs:
   verify:
@@ -31,9 +30,9 @@ jobs:
     strategy:
       matrix:
         os: [
-          { name: ubuntu-latest, binary-file-name: "fx-demo_0.0.1_amd64.deb", release-name: "fx-demo_0.0.1_amd64.deb", maven-profile: "-P linux-deb" },
-          { name: ubuntu-latest, binary-file-name: "demo.zip", release-name: "PublicDemoName-linux-image.zip", maven-profile: "-P app-image" },
-          { name: windows-latest, binary-file-name: "PublicDemoName-0.0.1.exe", release-name: "PublicDemoName-setup.exe", maven-profile: "-P windows-exe" }
+          { name: ubuntu-latest, binary-file-name: "noel_0.0.1_amd64.deb", release-name: "noel_0.0.1_amd64.deb", maven-profile: "-P linux-deb" },
+          { name: ubuntu-latest, binary-file-name: "noel.zip", release-name: "NoEl-linux-image.zip", maven-profile: "-P app-image" },
+          { name: windows-latest, binary-file-name: "NoEl-0.0.1.exe", release-name: "NoEl-setup.exe", maven-profile: "-P windows-exe" }
         ]
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +52,7 @@ jobs:
         if: contains(matrix.os.maven-profile, 'app-image')
         run: |
           pushd target/dist
-          zip -r demo.zip PublicDemoName
+          zip -r noel.zip NoEl
           popd
 
       - name: Upload binary to release
@@ -65,5 +64,6 @@ jobs:
           file: target/dist/${{ matrix.os.binary-file-name }}
           asset_name: ${{ matrix.os.release-name }}
           overwrite: true
-          tag: jpackage
+          prerelease: true
+          tag: dev-jpackage
           release_name: native image with jpackage

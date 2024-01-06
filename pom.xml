@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.holube</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>noel</artifactId>
     <version>0.0.1</version>
 
     <properties>
@@ -83,7 +83,7 @@
                         <configuration>
                             <type>EXE</type>
                             <winMenu>true</winMenu>
-                            <winUpgradeUuid>ed0a813c-d868-488d-9c23-1e16f0f4e8f6</winUpgradeUuid>
+                            <winUpgradeUuid>003031bf-b3c4-47b1-b2fa-101d636c7ecc</winUpgradeUuid>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -99,7 +99,7 @@
                         <configuration>
                             <type>DEB</type>
                             <linuxShortcut>true</linuxShortcut>
-                            <linuxPackageName>fx-demo</linuxPackageName>
+                            <linuxPackageName>noel</linuxPackageName>
                             <linuxAppCategory>Utilities</linuxAppCategory>
                             <linuxMenuGroup>Utilities</linuxMenuGroup>
                         </configuration>
@@ -134,10 +134,10 @@
                             <compress>1</compress>
                             <noHeaderFiles>true</noHeaderFiles>
                             <noManPages>true</noManPages>
-                            <jlinkImageName>demo</jlinkImageName>
-                            <jlinkZipName>demo</jlinkZipName>
+                            <jlinkImageName>noel</jlinkImageName>
+                            <jlinkZipName>noel</jlinkZipName>
                             <launcher>launcher</launcher>
-                            <mainClass>demo/de.holube.demo.MyApplication</mainClass>
+                            <mainClass>noel/de.holube.noel.NoelApplication</mainClass>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -145,11 +145,11 @@
                         <artifactId>jpackage-maven-plugin</artifactId>
                         <version>${jpackage.maven.plugin.version}</version>
                         <configuration>
-                            <name>PublicDemoName</name>
+                            <name>NoEl</name>
                             <vendor>Tilman</vendor>
                             <destination>target/dist</destination>
-                            <module>demo/de.holube.demo.MyApplication</module>
-                            <runtimeImage>target/demo</runtimeImage>
+                            <module>noel/de.holube.noel.NoelApplication</module>
+                            <runtimeImage>target/noel</runtimeImage>
                             <resourceDir>./jpackage</resourceDir>
                             <javaOptions>
                                 <option>-Dfile.encoding=UTF-8</option>
@@ -192,10 +192,10 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>
-                                    <mainClass>de.holube.demo.Launcher</mainClass>
+                                    <mainClass>de.holube.noel.Launcher</mainClass>
                                 </manifest>
                             </archive>
-                            <finalName>fx-demo</finalName>
+                            <finalName>noel</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                         <executions>

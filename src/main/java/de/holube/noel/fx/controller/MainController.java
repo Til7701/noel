@@ -1,6 +1,6 @@
-package de.holube.demo.fx.controller;
+package de.holube.noel.fx.controller;
 
-import de.holube.demo.fx.view.MainView;
+import de.holube.noel.fx.view.MainView;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

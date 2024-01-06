@@ -2,12 +2,12 @@
 
 set -e
 
-echo "Running postinst for fx-demo with $1"
+echo "Running postinst for noel with $1"
 if  [ "$1" = configure ]; then
   # creating a desktop item
-  xdg-desktop-menu install /opt/fx-demo/lib/fx-demo-PublicDemoName.desktop
+  xdg-desktop-menu install /opt/noel/lib/noel-NoEl.desktop
   # creating a link, so the application can be called from the command line
-  ln -sf /opt/fx-demo/bin/PublicDemoName /bin/fx-demo
+  ln -sf /opt/noel/bin/NoEl /bin/noel
 fi
 
 exit 0
