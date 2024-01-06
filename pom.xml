@@ -16,11 +16,12 @@
         <lombok.version>1.18.30</lombok.version>
         <junit.version>5.10.1</junit.version>
         <mockito.version>5.8.0</mockito.version>
+        <log4j.version>2.22.1</log4j.version>
 
         <!-- build -->
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>19</maven.compiler.release>
 
         <compiler.maven.plugin.version>3.12.1</compiler.maven.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -51,6 +52,23 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -228,6 +246,8 @@
                             <version>${lombok.version}</version>
                         </annotationProcessorPath>
                     </annotationProcessorPaths>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>

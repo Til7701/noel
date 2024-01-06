@@ -1,51 +1,56 @@
 package de.holube.noel;
 
+import de.holube.noel.fx.StageManager;
+import de.holube.noel.fx.controller.MainController;
 import de.holube.noel.fx.view.MainView;
+import de.holube.noel.io.AsyncFileIO;
+import de.holube.noel.model.FileManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
-import java.awt.Taskbar.Feature;
 import java.util.Arrays;
+import java.util.concurrent.Semaphore;
 
+@Slf4j
 public class NoelApplication extends Application {
 
+    private static final AsyncFileIO fileIO = new AsyncFileIO();
+    private static final FileManager fileManager = new FileManager(fileIO);
+    private static final Semaphore startupLock = new Semaphore(0);
+
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
+        log.debug("Started with args: " + Arrays.toString(args));
+
+        if (args.length > 0) {
+            fileIO.loadFile(args[0], fileModel -> {
+                startupLock.acquireUninterruptibly();
+                fileManager.addFile(fileModel);
+            });
+        }
+
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        setupIcons(primaryStage);
-        MainView mainView = new MainView();
-        Scene scene = new Scene(mainView, 320, 240);
-        primaryStage.setTitle("NoEl");
-        primaryStage.setScene(scene);
+        final StageManager stageManager = new StageManager(primaryStage);
+
+        final MainView mainView = new MainView();
+        final MainController mainController = new MainController(mainView, stageManager, fileManager);
+        fileManager.setMainController(mainController);
+
+        final Scene scene = new Scene(mainView, 1024, 720);
+        stageManager.setScene(scene);
+        stageManager.setTitle("NoEl");
         primaryStage.show();
+        startupLock.release();
     }
 
-    /**
-     * This method loads the icon for this application from the resources and sets on the taskbar and application bar.
-     *
-     * @param primaryStage the stage to set the icon on
-     */
-    private void setupIcons(Stage primaryStage) {
-        //Set icon on the application bar
-        final Image appIcon = new Image(String.valueOf(getClass().getResource("/icons/icon.png")));
-        primaryStage.getIcons().add(appIcon);
-
-        //Set icon on the taskbar/dock
-        if (Taskbar.isTaskbarSupported()) {
-            final Taskbar taskbar = Taskbar.getTaskbar();
-            if (taskbar.isSupported(Feature.ICON_IMAGE)) {
-                final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-                final java.awt.Image dockIcon = defaultToolkit.getImage(getClass().getResource("/icons/icon.png"));
-                taskbar.setIconImage(dockIcon);
-            }
-        }
+    @Override
+    public void stop() {
+        fileIO.close();
     }
 
 }
