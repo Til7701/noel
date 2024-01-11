@@ -11,13 +11,16 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 
     private final MainView mainView;
+
     private final StageManager stageManager;
     private final FileManager fileManager;
+
+    private final EditorController editorController;
 
     public void setFile(FileModel fileModel) {
         Platform.runLater(() -> {
             stageManager.setTitle("NoEl - " + fileModel.getPath());
-            mainView.getCodeArea().replaceText(fileModel.getContent());
+            editorController.setFile(fileModel);
         });
     }
 

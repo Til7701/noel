@@ -1,6 +1,7 @@
 package de.holube.noel;
 
 import de.holube.noel.fx.StageManager;
+import de.holube.noel.fx.ViewControllerInitializer;
 import de.holube.noel.fx.controller.MainController;
 import de.holube.noel.fx.view.MainView;
 import de.holube.noel.io.AsyncFileIO;
@@ -37,8 +38,9 @@ public class NoelApplication extends Application {
     public void start(Stage primaryStage) {
         final StageManager stageManager = new StageManager(primaryStage);
 
-        final MainView mainView = new MainView();
-        final MainController mainController = new MainController(mainView, stageManager, fileManager);
+        final ViewControllerInitializer initializer = new ViewControllerInitializer(stageManager, fileManager);
+        final MainView mainView = initializer.getMainView();
+        final MainController mainController = initializer.getMainController();
         fileManager.setMainController(mainController);
 
         final Scene scene = new Scene(mainView, 1024, 720);

@@ -2,15 +2,15 @@ package de.holube.noel.fx.view;
 
 import javafx.scene.layout.Pane;
 import lombok.Getter;
-import org.fxmisc.richtext.CodeArea;
 
 @Getter
 public class MainView extends Pane {
 
-    private final CodeArea codeArea = new CodeArea();
+    private final EditorView editorView;
 
-    public MainView() {
-        getChildren().add(codeArea);
+    public MainView(EditorView editorView) {
+        this.editorView = editorView;
+        getChildren().add(editorView);
     }
 
 }
