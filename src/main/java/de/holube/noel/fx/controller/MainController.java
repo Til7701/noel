@@ -17,7 +17,7 @@ public class MainController {
     public void setFile(FileModel fileModel) {
         Platform.runLater(() -> {
             stageManager.setTitle("NoEl - " + fileModel.getPath());
-            mainView.getTextArea().textProperty().set(fileModel.getContent());
+            mainView.getCodeArea().replaceText(fileModel.getContent());
         });
     }
 
