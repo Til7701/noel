@@ -8,6 +8,9 @@ import de.holube.noel.io.AsyncFileIO;
 import de.holube.noel.model.FileManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +20,13 @@ import java.util.concurrent.Semaphore;
 @Slf4j
 public class NoelApplication extends Application {
 
+    private static final KeyCombination SAVE_SHORTCUT = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+
     private static final AsyncFileIO fileIO = new AsyncFileIO();
     private static final FileManager fileManager = new FileManager(fileIO);
     private static final Semaphore startupLock = new Semaphore(0);
+
+    private MainController mainController;
 
     public static void main(String[] args) {
         log.debug("Started with args: " + Arrays.toString(args));
@@ -40,14 +47,22 @@ public class NoelApplication extends Application {
 
         final ViewControllerInitializer initializer = new ViewControllerInitializer(stageManager, fileManager);
         final MainView mainView = initializer.getMainView();
-        final MainController mainController = initializer.getMainController();
+        mainController = initializer.getMainController();
         fileManager.setMainController(mainController);
 
         final Scene scene = new Scene(mainView, 1024, 720);
         stageManager.setScene(scene);
         stageManager.setTitle("NoEl");
+        setupShortcuts(scene);
         primaryStage.show();
         startupLock.release();
+    }
+
+    private void setupShortcuts(Scene scene) {
+        scene.getAccelerators().put(SAVE_SHORTCUT, () -> {
+            log.info("Saving current file.");
+            mainController.saveCurrentFile();
+        });
     }
 
     @Override

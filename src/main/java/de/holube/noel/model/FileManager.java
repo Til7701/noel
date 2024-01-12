@@ -37,18 +37,14 @@ public class FileManager {
         }
     }
 
-    public void saveFile(String path) {
-        FileModel fileModel;
-        readLock.lock();
+    public void saveFile(FileModel fileModel) {
+        writeLock.lock();
         try {
-            fileModel = openFiles.get(path);
+            openFiles.put(fileModel.getPath(), fileModel);
         } finally {
-            readLock.unlock();
+            writeLock.unlock();
         }
-        if (fileModel != null)
-            fileIO.saveFile(fileModel);
-        else
-            log.error("Could not find file to save");
+        fileIO.saveFile(fileModel);
     }
 
 }

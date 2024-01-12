@@ -20,8 +20,12 @@ public class MainController {
     public void setFile(FileModel fileModel) {
         Platform.runLater(() -> {
             stageManager.setTitle("NoEl - " + fileModel.getPath());
-            editorController.setFile(fileModel);
+            editorController.setFileModel(fileModel);
         });
+    }
+
+    public void saveCurrentFile() {
+        fileManager.saveFile(editorController.getFileModel());
     }
 
 }

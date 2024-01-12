@@ -9,8 +9,16 @@ public class EditorController {
 
     private final EditorView editorView;
 
-    public void setFile(FileModel fileModel) {
+    private FileModel fileModel;
+
+    public FileModel getFileModel() {
+        fileModel.setContent(editorView.getCodeArea().getText());
+        return fileModel;
+    }
+
+    public void setFileModel(FileModel fileModel) {
         editorView.getCodeArea().replaceText(fileModel.getContent());
+        this.fileModel = fileModel;
     }
 
 }
