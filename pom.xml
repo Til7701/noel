@@ -21,7 +21,7 @@
         <!-- build -->
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.compiler.release>19</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <compiler.maven.plugin.version>3.12.1</compiler.maven.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
