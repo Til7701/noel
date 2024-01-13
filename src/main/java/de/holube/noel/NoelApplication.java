@@ -51,16 +51,17 @@ public class NoelApplication extends Application {
         fileManager.setMainController(mainController);
 
         final Scene scene = new Scene(mainView, 1024, 720);
+        setupShortcuts(scene);
+
         stageManager.setScene(scene);
         stageManager.setTitle("NoEl");
-        setupShortcuts(scene);
         primaryStage.show();
         startupLock.release();
     }
 
     private void setupShortcuts(Scene scene) {
         scene.getAccelerators().put(SAVE_SHORTCUT, () -> {
-            log.info("Saving current file.");
+            log.debug("Save shortcut used");
             mainController.saveCurrentFile();
         });
     }
