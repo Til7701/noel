@@ -15,7 +15,7 @@ on:
 
 jobs:
   build-with-jar-jpackage:
-    name: Build on ${{ matrix.os.name }} with jlink-jpackage ${{ matrix.os.maven-profile }}
+    name: Build on ${{ matrix.os.name }} with jar-jpackage ${{ matrix.os.maven-profile }}
     runs-on: ${{ matrix.os.name }}
     strategy:
       matrix:
