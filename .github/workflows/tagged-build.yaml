@@ -3,13 +3,13 @@ name: tagged-version build all targets
 on:
   push:
     tags:
-      - 'v*'
+      - '*.*'
 
 jobs:
   build:
     uses: ./.github/workflows/build.yaml
     with:
-      tag: ${GITHUB_REF#refs/*/}
-      version: ${GITHUB_REF:11}
+      tag: ${{ github.ref_name }}
+      version: ${{ github.ref_name }}
       prerelease: false
     secrets: inherit
