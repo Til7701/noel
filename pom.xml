@@ -186,7 +186,7 @@
                             <name>NoEl</name>
                             <vendor>Tilman</vendor>
                             <mainJar>noel.jar</mainJar>
-                            <input>target</input>
+                            <input>target/input</input>
                             <temp>target/tmp</temp>
                             <destination>target/dist</destination>
                             <resourceDir>./jpackage</resourceDir>
