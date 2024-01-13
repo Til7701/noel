@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class FileManager {
         this.fileIO = fileIO;
     }
 
-    public void addFile(FileModel fileModel) {
+    public void openFile(FileModel fileModel) {
         writeLock.lock();
         try {
             openFiles.put(fileModel.getPath(), fileModel);
@@ -37,14 +39,35 @@ public class FileManager {
         }
     }
 
-    public void saveFile(FileModel fileModel) {
+    public boolean saveFiles() {
+        readLock.lock();
+        final CountDownLatch latch = new CountDownLatch(openFiles.size());
+        final AtomicBoolean failure = new AtomicBoolean(false);
+        try {
+            for (var entry : openFiles.entrySet()) {
+                fileIO.saveFile(entry.getValue(), latch::countDown, e -> {
+                    failure.set(true);
+                    latch.countDown();
+                });
+            }
+            latch.await();
+            return !failure.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    public void closeFile(FileModel fileModel) {
         writeLock.lock();
         try {
-            openFiles.put(fileModel.getPath(), fileModel);
+            openFiles.remove(fileModel.getPath(), fileModel);
+            mainController.closeFile(fileModel);
         } finally {
             writeLock.unlock();
         }
-        fileIO.saveFile(fileModel);
     }
 
 }

@@ -24,8 +24,18 @@ public class MainController {
         });
     }
 
-    public void saveCurrentFile() {
-        fileManager.saveFile(editorController.getFileModel());
+    public void saveFiles() {
+        Platform.runLater(() -> {
+            editorController.updateFileModel();
+            fileManager.saveFiles(); // TODO handle fail
+        });
+    }
+
+    public void closeFile(FileModel fileModel) {
+        Platform.runLater(() -> {
+            stageManager.setTitle("NoEl");
+            editorController.closeFile(fileModel);
+        });
     }
 
 }

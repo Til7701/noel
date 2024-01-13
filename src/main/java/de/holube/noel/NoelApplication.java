@@ -34,7 +34,7 @@ public class NoelApplication extends Application {
         if (args.length > 0) {
             fileIO.loadFile(args[0], fileModel -> {
                 startupLock.acquireUninterruptibly();
-                fileManager.addFile(fileModel);
+                fileManager.openFile(fileModel);
             });
         }
 
@@ -62,7 +62,7 @@ public class NoelApplication extends Application {
     private void setupShortcuts(Scene scene) {
         scene.getAccelerators().put(SAVE_SHORTCUT, () -> {
             log.debug("Save shortcut used");
-            mainController.saveCurrentFile();
+            mainController.saveFiles();
         });
     }
 

@@ -11,14 +11,17 @@ public class EditorController {
 
     private FileModel fileModel;
 
-    public FileModel getFileModel() {
+    void updateFileModel() {
         fileModel.setContent(editorView.getCodeArea().getText());
-        return fileModel;
     }
 
-    public void setFileModel(FileModel fileModel) {
+    void setFileModel(FileModel fileModel) {
         editorView.getCodeArea().replaceText(fileModel.getContent());
         this.fileModel = fileModel;
     }
 
+    void closeFile(FileModel fileModel) {
+        this.fileModel = null;
+        editorView.getCodeArea().replaceText("");
+    }
 }
