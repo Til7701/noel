@@ -1,38 +1,43 @@
-name: Native Image Development Build
+name: Native Image Build
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      prerelease:
+        required: true
+        type: boolean
 
 jobs:
-  verify:
-    name: Verify project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-
-      - name: Verify with Maven
-        run: mvn --batch-mode --update-snapshots verify
-
-
   build-with-jpackage:
-    needs: verify
     name: Build on ${{ matrix.os.name }} with jpackage ${{ matrix.os.maven-profile }}
     runs-on: ${{ matrix.os.name }}
     strategy:
       matrix:
         os: [
-          { name: ubuntu-latest, binary-file-name: "noel_0.0.1_amd64.deb", release-name: "noel_0.0.1_amd64.deb", maven-profile: "-P linux-deb" },
-          { name: ubuntu-latest, binary-file-name: "noel.zip", release-name: "NoEl-linux-image.zip", maven-profile: "-P app-image" },
-          { name: windows-latest, binary-file-name: "NoEl-0.0.1.exe", release-name: "NoEl-setup.exe", maven-profile: "-P windows-exe" }
+          {
+            name: ubuntu-latest,
+            binary-file-name: ${ { format('noel_{ 0 }_amd64.deb', inputs.version) } },
+            release-name: ${ { format('noel_{ 0 }_amd64.deb', inputs.version) } },
+            maven-profile: "-P linux-deb"
+          },
+          {
+            name: ubuntu-latest,
+            binary-file-name: "noel.zip",
+            release-name: ${ { format('NoEl-{ 0 }linux-image.zip', inputs.version) } },
+            maven-profile: "-P app-image"
+          },
+          {
+            name: windows-latest,
+            binary-file-name: ${ { format('NoEl-{ 0 }.exe', inputs.version) } },
+            release-name: ${ { format('NoEl-{ 0 }-setup.exe', inputs.version) } },
+            maven-profile: "-P windows-exe"
+          }
         ]
     steps:
       - uses: actions/checkout@v4
@@ -64,6 +69,6 @@ jobs:
           file: target/dist/${{ matrix.os.binary-file-name }}
           asset_name: ${{ matrix.os.release-name }}
           overwrite: true
-          prerelease: true
-          tag: dev-jpackage
-          release_name: native image with jpackage
+          prerelease: ${{ inputs.prerelease }}
+          tag: ${{ inputs.tag }}
+          release_name: ${{ inputs.tag }}

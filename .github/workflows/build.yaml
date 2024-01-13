@@ -1,0 +1,32 @@
+name: build all targets
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      prerelease:
+        required: true
+        type: boolean
+
+jobs:
+  verify:
+    uses: ./.github/workflows/verify.yaml
+
+  build-to-fat-jar:
+    needs: verify
+    uses: ./.github/workflows/fat-jar.yaml
+    with:
+      tag: ${{ inputs.tag }}
+      prerelease: ${{ inputs.prerelease }}
+    secrets: inherit
+
+  build-with-jpackage:
+    needs: verify
+    uses: ./.github/workflows/fat-jar.yaml
+    with:
+      tag: ${{ inputs.tag }}
+      version: ${{ inputs.tag }}
+      prerelease: ${{ inputs.prerelease }}
+    secrets: inherit
