@@ -6,6 +6,9 @@ on:
       tag:
         required: true
         type: string
+      version:
+        required: true
+        type: string
       prerelease:
         required: true
         type: boolean
@@ -27,6 +30,6 @@ jobs:
     uses: ./.github/workflows/native.yaml
     with:
       tag: ${{ inputs.tag }}
-      version: ${{ inputs.tag }}
+      version: ${{ inputs.version }}
       prerelease: ${{ inputs.prerelease }}
     secrets: inherit

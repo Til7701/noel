@@ -6,9 +6,10 @@ on:
       - develop
 
 jobs:
-  verify:
+  build:
     uses: ./.github/workflows/build.yaml
     with:
       tag: dev
+      version: dev
       prerelease: true
     secrets: inherit
