@@ -25,9 +25,18 @@ jobs:
       prerelease: ${{ inputs.prerelease }}
     secrets: inherit
 
-  build-with-jpackage:
+  build-with-jlink-jpackage:
     needs: verify
-    uses: ./.github/workflows/native.yaml
+    uses: ./.github/workflows/jlink-jpackage.yaml
+    with:
+      tag: ${{ inputs.tag }}
+      version: ${{ inputs.version }}
+      prerelease: ${{ inputs.prerelease }}
+    secrets: inherit
+
+  build-with-jar-jpackage:
+    needs: verify
+    uses: ./.github/workflows/jar-jpackage.yaml
     with:
       tag: ${{ inputs.tag }}
       version: ${{ inputs.version }}

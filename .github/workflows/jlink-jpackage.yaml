@@ -1,0 +1,74 @@
+name: Native Image Build from JLink
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      prerelease:
+        required: true
+        type: boolean
+
+jobs:
+  build-with-jlink-jpackage:
+    name: Build on ${{ matrix.os.name }} with jlink-jpackage ${{ matrix.os.maven-profile }}
+    runs-on: ${{ matrix.os.name }}
+    strategy:
+      matrix:
+        os: [
+          {
+            name: ubuntu-latest,
+            binary-file-name: "${{ format('noel_{0}_amd64.deb', inputs.version) }}",
+            release-name: "${{ format('noel_{0}_amd64.deb', inputs.version) }}",
+            maven-profile: "-P linux-deb"
+          },
+          {
+            name: ubuntu-latest,
+            binary-file-name: "noel.zip",
+            release-name: "${{ format('NoEl-{0}linux-image.zip', inputs.version) }}",
+            maven-profile: "-P app-image"
+          },
+          {
+            name: windows-latest,
+            binary-file-name: "${{ format('NoEl-{0}.exe', inputs.version) }}",
+            release-name: "${{ format('NoEl-{0}-setup.exe', inputs.version) }}",
+            maven-profile: "-P windows-exe"
+          }
+        ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: |
+          mvn -P jlink-jpackage ${{ matrix.os.maven-profile }} --batch-mode --update-snapshots clean compile javafx:jlink jpackage:jpackage
+
+      - name: zip target app-image
+        if: contains(matrix.os.maven-profile, 'app-image')
+        run: |
+          pushd target/dist
+          zip -r noel.zip NoEl
+          popd
+
+      - name: Upload binary to release
+        uses: svenstaro/upload-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/dist/${{ matrix.os.binary-file-name }}
+          asset_name: ${{ matrix.os.release-name }}
+          overwrite: true
+          prerelease: ${{ inputs.prerelease }}
+          tag: ${{ inputs.tag }}
+          release_name: ${{ inputs.tag }}

@@ -137,7 +137,7 @@
             </build>
         </profile>
         <profile>
-            <id>jpackage</id>
+            <id>jlink-jpackage</id>
             <build>
                 <plugins>
                     <plugin>
@@ -165,6 +165,29 @@
                             <destination>target/dist</destination>
                             <module>noel/de.holube.noel.NoelApplication</module>
                             <runtimeImage>target/noel</runtimeImage>
+                            <resourceDir>./jpackage</resourceDir>
+                            <javaOptions>
+                                <option>-Dfile.encoding=UTF-8</option>
+                            </javaOptions>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jar-jpackage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <version>${jpackage.maven.plugin.version}</version>
+                        <configuration>
+                            <name>NoEl</name>
+                            <vendor>Tilman</vendor>
+                            <mainJar>noel.jar</mainJar>
+                            <input>target</input>
+                            <destination>target/dist</destination>
                             <resourceDir>./jpackage</resourceDir>
                             <javaOptions>
                                 <option>-Dfile.encoding=UTF-8</option>
@@ -243,8 +266,8 @@
                             <version>${lombok.version}</version>
                         </annotationProcessorPath>
                     </annotationProcessorPaths>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
         </plugins>

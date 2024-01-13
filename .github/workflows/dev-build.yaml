@@ -10,6 +10,6 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       tag: dev
-      version: dev
+      version: 0.0.1
       prerelease: true
     secrets: inherit
