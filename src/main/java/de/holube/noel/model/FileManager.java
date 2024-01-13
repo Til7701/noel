@@ -30,6 +30,7 @@ public class FileManager {
     }
 
     public void openFile(FileModel fileModel) {
+        log.debug("Opening file: " + fileModel.getPath());
         writeLock.lock();
         try {
             openFiles.put(fileModel.getPath(), fileModel);
@@ -40,6 +41,7 @@ public class FileManager {
     }
 
     public boolean saveFiles() {
+        log.debug("Saving all files");
         readLock.lock();
         final CountDownLatch latch = new CountDownLatch(openFiles.size());
         final AtomicBoolean failure = new AtomicBoolean(false);
@@ -61,6 +63,7 @@ public class FileManager {
     }
 
     public void closeFile(FileModel fileModel) {
+        log.debug("Closing file: " + fileModel.getPath());
         writeLock.lock();
         try {
             openFiles.remove(fileModel.getPath(), fileModel);
