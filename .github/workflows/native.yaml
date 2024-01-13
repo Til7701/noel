@@ -22,20 +22,20 @@ jobs:
         os: [
           {
             name: ubuntu-latest,
-            binary-file-name: ${ { format('noel_{ 0 }_amd64.deb', inputs.version) } },
-            release-name: ${ { format('noel_{ 0 }_amd64.deb', inputs.version) } },
+            binary-file-name: "${{ format('noel_{ 0 }_amd64.deb', inputs.version) }}",
+            release-name: "${{ format('noel_{ 0 }_amd64.deb', inputs.version) }}",
             maven-profile: "-P linux-deb"
           },
           {
             name: ubuntu-latest,
             binary-file-name: "noel.zip",
-            release-name: ${ { format('NoEl-{ 0 }linux-image.zip', inputs.version) } },
+            release-name: "${{ format('NoEl-{ 0 }linux-image.zip', inputs.version) }}",
             maven-profile: "-P app-image"
           },
           {
             name: windows-latest,
-            binary-file-name: ${ { format('NoEl-{ 0 }.exe', inputs.version) } },
-            release-name: ${ { format('NoEl-{ 0 }-setup.exe', inputs.version) } },
+            binary-file-name: "${{ format('NoEl-{ 0 }.exe', inputs.version) }}",
+            release-name: "${{ format('NoEl-{ 0 }-setup.exe', inputs.version) }}",
             maven-profile: "-P windows-exe"
           }
         ]
