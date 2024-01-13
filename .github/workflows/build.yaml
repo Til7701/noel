@@ -24,7 +24,7 @@ jobs:
 
   build-with-jpackage:
     needs: verify
-    uses: ./.github/workflows/fat-jar.yaml
+    uses: ./.github/workflows/native.yaml
     with:
       tag: ${{ inputs.tag }}
       version: ${{ inputs.tag }}
