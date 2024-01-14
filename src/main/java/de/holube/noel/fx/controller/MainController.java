@@ -15,6 +15,7 @@ public class MainController {
     private final StageManager stageManager;
     private final FileManager fileManager;
 
+    private final FolderController folderController;
     private final EditorController editorController;
 
     public void setFile(FileModel fileModel) {
