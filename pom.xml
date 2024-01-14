@@ -188,7 +188,7 @@
                             <mainJar>noel.jar</mainJar>
                             <mainClass>de.holube.noel.Launcher</mainClass>
                             <input>target/</input>
-                            <destination>./</destination>
+                            <destination>./dist</destination>
                             <resourceDir>./jpackage</resourceDir>
                             <javaOptions>
                                 <option>-Dfile.encoding=UTF-8</option>

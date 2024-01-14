@@ -22,19 +22,19 @@ jobs:
         os: [
           {
             name: ubuntu-latest,
-            binary-file-name: "${{ format('noel_{0}_amd64.deb', inputs.version) }}",
+            binary-file-name: "${{ format('jar-noel_{0}_amd64.deb', inputs.version) }}",
             release-name: "${{ format('noel_{0}_amd64.deb', inputs.version) }}",
             maven-profile: "-P linux-deb"
           },
           {
             name: ubuntu-latest,
             binary-file-name: "noel.zip",
-            release-name: "${{ format('NoEl-{0}linux-image.zip', inputs.version) }}",
+            release-name: "${{ format('jar-NoEl-{0}linux-image.zip', inputs.version) }}",
             maven-profile: "-P app-image"
           },
           {
             name: windows-latest,
-            binary-file-name: "${{ format('NoEl-{0}.exe', inputs.version) }}",
+            binary-file-name: "${{ format('jar-NoEl-{0}.exe', inputs.version) }}",
             release-name: "${{ format('NoEl-{0}-setup.exe', inputs.version) }}",
             maven-profile: "-P windows-exe"
           }
@@ -56,7 +56,7 @@ jobs:
       - name: zip target app-image
         if: contains(matrix.os.maven-profile, 'app-image')
         run: |
-          pushd target/dist
+          pushd ./dist
           zip -r noel.zip NoEl
           popd
 
@@ -66,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/dist/${{ matrix.os.binary-file-name }}
+          file: ./dist/${{ matrix.os.binary-file-name }}
           asset_name: ${{ matrix.os.release-name }}
           overwrite: true
           prerelease: ${{ inputs.prerelease }}
