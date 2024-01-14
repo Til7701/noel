@@ -185,7 +185,7 @@
                         <configuration>
                             <name>NoEl</name>
                             <vendor>Tilman</vendor>
-                            <mainJar>noel.jar</mainJar>
+                            <mainJar>noel-${project.version}.jar</mainJar>
                             <mainClass>de.holube.noel.Launcher</mainClass>
                             <input>target/</input>
                             <destination>./dist</destination>

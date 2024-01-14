@@ -51,7 +51,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          mvn -P jar-jpackage -P fat-jar ${{ matrix.os.maven-profile }} --batch-mode --update-snapshots clean package jpackage:jpackage
+          mvn -P jar-jpackage ${{ matrix.os.maven-profile }} --batch-mode --update-snapshots clean package jpackage:jpackage
           ls
           ls target/
 
