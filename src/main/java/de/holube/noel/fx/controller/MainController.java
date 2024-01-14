@@ -4,7 +4,9 @@ import de.holube.noel.fx.StageManager;
 import de.holube.noel.fx.view.MainView;
 import de.holube.noel.model.FileManager;
 import de.holube.noel.model.FileModel;
+import de.holube.noel.model.FolderModel;
 import javafx.application.Platform;
+import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -37,6 +39,13 @@ public class MainController {
             stageManager.setTitle("NoEl");
             editorController.closeFile(fileModel);
         });
+    }
+
+    public void setFolderModel(FolderModel folderModel) {
+        TreeItem<FolderModel> root = folderModel.createTreeItem();
+        Platform.runLater(() ->
+                folderController.setFolderModel(root)
+        );
     }
 
 }

@@ -36,6 +36,9 @@ public class NoelApplication extends Application {
                 startupLock.acquireUninterruptibly();
                 fileManager.openFile(fileModel);
             });
+            fileIO.getParentDirectoryPath(args[0], s ->
+                    fileIO.createFolderModel(s, fileManager::setFolderModel, e -> log.error("Could not create folder model!", e))
+            );
         }
 
         launch(args);

@@ -73,4 +73,8 @@ public class FileManager {
         }
     }
 
+    public void setFolderModel(FolderModel folderModel) {
+        mainController.setFolderModel(folderModel);
+    }
+
 }
