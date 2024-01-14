@@ -186,9 +186,8 @@
                             <name>NoEl</name>
                             <vendor>Tilman</vendor>
                             <mainJar>noel.jar</mainJar>
+                            <mainClass>de.holube.noel.Launcher</mainClass>
                             <input>target/input</input>
-                            <temp>target/tmp</temp>
-                            <destination>target/dist</destination>
                             <resourceDir>./jpackage</resourceDir>
                             <javaOptions>
                                 <option>-Dfile.encoding=UTF-8</option>
