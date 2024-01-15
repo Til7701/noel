@@ -23,7 +23,7 @@ public class ViewControllerInitializer {
 
     public ViewControllerInitializer(StageManager stageManager, WorkspaceManager workspaceManager) {
         folderView = new FolderView();
-        folderController = new FolderController(folderView);
+        folderController = new FolderController(folderView, workspaceManager);
 
         editorView = new EditorView();
         editorController = new EditorController(editorView);

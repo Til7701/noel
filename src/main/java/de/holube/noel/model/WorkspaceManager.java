@@ -77,4 +77,8 @@ public class WorkspaceManager {
         mainController.setFolderModel(folderModel);
     }
 
+    public void openFileFromFolderModel(FolderModel value) {
+        fileIO.loadFile(value.getPath(), this::openFile);
+    }
+
 }
