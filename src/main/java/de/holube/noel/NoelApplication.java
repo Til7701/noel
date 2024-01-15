@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,7 +54,7 @@ public class NoelApplication extends Application {
         mainController = initializer.getMainController();
         WORKSPACE_MANAGER.setMainController(mainController);
 
-        final Scene scene = new Scene(mainView, 1024, 720);
+        final Scene scene = new Scene(mainView, Screen.getPrimary().getBounds().getWidth() * 0.7D, Screen.getPrimary().getBounds().getHeight() * 0.7D);
         setupShortcuts(scene);
 
         stageManager.setScene(scene);
