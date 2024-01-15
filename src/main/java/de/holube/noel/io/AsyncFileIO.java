@@ -18,7 +18,15 @@ import java.util.function.Consumer;
 @Slf4j
 public class AsyncFileIO {
 
+    private static final String FILE_SEPARATOR_REGEX;
     private static final AtomicInteger threadCount = new AtomicInteger(0);
+
+    static {
+        if (File.separator.equals("\\"))
+            FILE_SEPARATOR_REGEX = "\\\\";
+        else
+            FILE_SEPARATOR_REGEX = File.separator;
+    }
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor(r -> {
         Thread thread = new Thread(r);
@@ -70,19 +78,23 @@ public class AsyncFileIO {
         executorService.submit(() -> {
             log.info("Getting parent directory for file: " + path);
             try {
-                File file = new File(path);
+                String pathToUse = path;
+                if (pathToUse.startsWith("." + FILE_SEPARATOR_REGEX))
+                    pathToUse = pathToUse.substring(2);
+
+                File file = new File(pathToUse);
                 if (!file.exists())
                     throw new FileNotFoundException();
+
+                String absolutePath = file.getAbsolutePath();
+                if (absolutePath.endsWith("."))
+                    absolutePath = absolutePath.substring(0, absolutePath.length() - 1);
+
                 if (file.isDirectory()) {
-                    log.debug("directory path: " + path);
-                    successConsumer.accept(path);
-                } else if (file.getParent() != null) {
-                    String dirPath = file.getParent();
-                    log.debug("directory path: " + dirPath);
-                    successConsumer.accept(dirPath);
+                    log.debug("directory path: " + absolutePath);
+                    successConsumer.accept(absolutePath);
                 } else {
-                    String absolutePath = file.getAbsolutePath();
-                    String[] splitPath = absolutePath.split(File.separator.equals("\\") ? "\\\\" : File.separator);
+                    String[] splitPath = absolutePath.split(FILE_SEPARATOR_REGEX); // regex warning handled with the inline if
                     String[] splitDirPath = new String[splitPath.length - 1];
                     System.arraycopy(splitPath, 0, splitDirPath, 0, splitPath.length - 1);
                     String dirPath = String.join(File.separator, splitDirPath);
@@ -111,13 +123,20 @@ public class AsyncFileIO {
     }
 
     private void createFolderModel(File file, FolderModel parent) throws IOException {
-        FolderModel folderModel = new FolderModel(file.getPath(), file.getName(), true);
+        FolderModel folderModel = new FolderModel(file.getPath(), file.getName(), false);
         if (file.isDirectory()) {
             folderModel.setDirectory(true);
             parent.getChildren().add(folderModel);
             for (File f : Objects.requireNonNull(file.listFiles())) {
                 createFolderModel(f, folderModel);
             }
+            parent.getChildren().sort((a, b) -> {
+                if (a.isDirectory() && !b.isDirectory())
+                    return -1;
+                else if (!a.isDirectory() && b.isDirectory())
+                    return 1;
+                return a.getName().compareTo(b.getName());
+            });
         } else {
             parent.getChildren().add(folderModel);
         }
