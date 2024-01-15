@@ -20,7 +20,7 @@ public class EditorController {
         this.fileModel = fileModel;
     }
 
-    void closeFile(FileModel fileModel) {
+    void closeFile() {
         this.fileModel = null;
         editorView.getCodeArea().replaceText("");
     }

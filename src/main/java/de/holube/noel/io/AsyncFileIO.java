@@ -44,7 +44,7 @@ public class AsyncFileIO {
             log.info("Loading file: " + path);
             try {
                 String content = Files.readString(Path.of(path));
-                log.debug("Loaded file: " + path + "successfully");
+                log.debug("Loaded file: " + path + " successfully");
                 successConsumer.accept(new FileModel(path, content));
             } catch (IOException e) {
                 failConsumer.accept(new FileReadException("Could not read file", e));

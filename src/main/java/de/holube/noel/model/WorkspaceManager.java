@@ -62,6 +62,17 @@ public class WorkspaceManager {
         }
     }
 
+    public void closeAllFiles() {
+        log.debug("Closing all files");
+        writeLock.lock();
+        try {
+            openFiles.clear();
+            mainController.closeAllFiles();
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
     public void closeFile(FileModel fileModel) {
         log.debug("Closing file: " + fileModel.getPath());
         writeLock.lock();
@@ -74,11 +85,21 @@ public class WorkspaceManager {
     }
 
     public void setFolderModel(FolderModel folderModel) {
-        mainController.setFolderModel(folderModel);
+        writeLock.lock();
+        try {
+            mainController.setFolderModel(folderModel);
+        } finally {
+            writeLock.unlock();
+        }
     }
 
-    public void openFileFromFolderModel(FolderModel value) {
-        fileIO.loadFile(value.getPath(), this::openFile);
+    public void openFileFromFolderModel(FolderModel folderModel) {
+        mainController.syncModels();
+        if (saveFiles()) {
+            closeAllFiles();
+            fileIO.loadFile(folderModel.getPath(), this::openFile);
+        } else
+            log.error("did not open file, could not save previous one");
     }
 
 }

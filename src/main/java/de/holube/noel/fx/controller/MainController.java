@@ -1,5 +1,6 @@
 package de.holube.noel.fx.controller;
 
+import de.holube.noel.fx.PlatformExt;
 import de.holube.noel.fx.StageManager;
 import de.holube.noel.fx.view.MainView;
 import de.holube.noel.model.FileModel;
@@ -20,6 +21,10 @@ public class MainController {
     private final FolderController folderController;
     private final EditorController editorController;
 
+    public void syncModels() {
+        PlatformExt.runAndWait(editorController::updateFileModel);
+    }
+
     public void setFile(FileModel fileModel) {
         Platform.runLater(() -> {
             stageManager.setTitle("NoEl - " + fileModel.getPath());
@@ -29,7 +34,7 @@ public class MainController {
 
     public void saveFiles() {
         Platform.runLater(() -> {
-            editorController.updateFileModel();
+            syncModels();
             workspaceManager.saveFiles(); // TODO handle fail
         });
     }
@@ -37,7 +42,7 @@ public class MainController {
     public void closeFile(FileModel fileModel) {
         Platform.runLater(() -> {
             stageManager.setTitle("NoEl");
-            editorController.closeFile(fileModel);
+            editorController.closeFile();
         });
     }
 
@@ -46,6 +51,10 @@ public class MainController {
         Platform.runLater(() ->
                 folderController.setFolderModel(root)
         );
+    }
+
+    public void closeAllFiles() {
+        closeFile(null);
     }
 
 }
