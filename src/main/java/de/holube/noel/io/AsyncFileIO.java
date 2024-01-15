@@ -130,13 +130,7 @@ public class AsyncFileIO {
             for (File f : Objects.requireNonNull(file.listFiles())) {
                 createFolderModel(f, folderModel);
             }
-            parent.getChildren().sort((a, b) -> {
-                if (a.isDirectory() && !b.isDirectory())
-                    return -1;
-                else if (!a.isDirectory() && b.isDirectory())
-                    return 1;
-                return a.getName().compareTo(b.getName());
-            });
+            parent.getChildren().sort(FolderModel::compareTo);
         } else {
             parent.getChildren().add(folderModel);
         }

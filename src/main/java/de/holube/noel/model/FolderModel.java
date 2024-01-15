@@ -1,10 +1,7 @@
 package de.holube.noel.model;
 
 import javafx.scene.control.TreeItem;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,8 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-public class FolderModel {
+@EqualsAndHashCode
+public class FolderModel implements Comparable<FolderModel> {
 
     private final List<FolderModel> children = new ArrayList<>();
     private String path;
@@ -30,6 +28,15 @@ public class FolderModel {
         TreeItem<FolderModel> root = new TreeItem<>(this);
         children.forEach(c -> root.getChildren().add(c.createTreeItem()));
         return root;
+    }
+
+    @Override
+    public int compareTo(FolderModel o) {
+        if (this.isDirectory() && !o.isDirectory())
+            return -1;
+        else if (!this.isDirectory() && o.isDirectory())
+            return 1;
+        return this.getName().compareTo(o.getName());
     }
 
 }
