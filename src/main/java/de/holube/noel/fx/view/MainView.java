@@ -4,6 +4,8 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class MainView extends AnchorPane {
 
@@ -24,6 +26,8 @@ public class MainView extends AnchorPane {
 
         splitPane.getItems().addAll(folderView, editorView);
         splitPane.setDividerPosition(0, 0.2D);
+
+        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
     }
 
 }

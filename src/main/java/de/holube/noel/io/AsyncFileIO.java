@@ -114,7 +114,7 @@ public class AsyncFileIO {
                 File root = new File(path);
                 FolderModel folderModel = new FolderModel(root.getPath(), root.getName(), root.isDirectory());
                 createFolderModel(new File(path), folderModel);
-                successConsumer.accept(folderModel);
+                successConsumer.accept(folderModel.getChildren().getFirst());
             } catch (IOException e) {
                 log.error("Could not create folder model", e);
                 failConsumer.accept(new FolderModelException("Could not create folder model", e));
