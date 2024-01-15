@@ -5,7 +5,7 @@ import de.holube.noel.fx.ViewControllerInitializer;
 import de.holube.noel.fx.controller.MainController;
 import de.holube.noel.fx.view.MainView;
 import de.holube.noel.io.AsyncFileIO;
-import de.holube.noel.model.FileManager;
+import de.holube.noel.model.WorkspaceManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -23,7 +23,7 @@ public class NoelApplication extends Application {
     private static final KeyCombination SAVE_SHORTCUT = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 
     private static final AsyncFileIO fileIO = new AsyncFileIO();
-    private static final FileManager fileManager = new FileManager(fileIO);
+    private static final WorkspaceManager WORKSPACE_MANAGER = new WorkspaceManager(fileIO);
     private static final Semaphore startupLock = new Semaphore(0);
 
     private MainController mainController;
@@ -34,10 +34,10 @@ public class NoelApplication extends Application {
         if (args.length > 0) {
             fileIO.loadFile(args[0], fileModel -> {
                 startupLock.acquireUninterruptibly();
-                fileManager.openFile(fileModel);
+                WORKSPACE_MANAGER.openFile(fileModel);
             });
             fileIO.getParentDirectoryPath(args[0], s ->
-                    fileIO.createFolderModel(s, fileManager::setFolderModel, e -> log.error("Could not create folder model!", e))
+                    fileIO.createFolderModel(s, WORKSPACE_MANAGER::setFolderModel, e -> log.error("Could not create folder model!", e))
             );
         }
 
@@ -48,10 +48,10 @@ public class NoelApplication extends Application {
     public void start(Stage primaryStage) {
         final StageManager stageManager = new StageManager(primaryStage);
 
-        final ViewControllerInitializer initializer = new ViewControllerInitializer(stageManager, fileManager);
+        final ViewControllerInitializer initializer = new ViewControllerInitializer(stageManager, WORKSPACE_MANAGER);
         final MainView mainView = initializer.getMainView();
         mainController = initializer.getMainController();
-        fileManager.setMainController(mainController);
+        WORKSPACE_MANAGER.setMainController(mainController);
 
         final Scene scene = new Scene(mainView, 1024, 720);
         setupShortcuts(scene);

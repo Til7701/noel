@@ -2,9 +2,9 @@ package de.holube.noel.fx.controller;
 
 import de.holube.noel.fx.StageManager;
 import de.holube.noel.fx.view.MainView;
-import de.holube.noel.model.FileManager;
 import de.holube.noel.model.FileModel;
 import de.holube.noel.model.FolderModel;
+import de.holube.noel.model.WorkspaceManager;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class MainController {
     private final MainView mainView;
 
     private final StageManager stageManager;
-    private final FileManager fileManager;
+    private final WorkspaceManager workspaceManager;
 
     private final FolderController folderController;
     private final EditorController editorController;
@@ -30,7 +30,7 @@ public class MainController {
     public void saveFiles() {
         Platform.runLater(() -> {
             editorController.updateFileModel();
-            fileManager.saveFiles(); // TODO handle fail
+            workspaceManager.saveFiles(); // TODO handle fail
         });
     }
 

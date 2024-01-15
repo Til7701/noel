@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Slf4j
-public class FileManager {
+public class WorkspaceManager {
 
     private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
@@ -25,7 +25,7 @@ public class FileManager {
     @Setter
     private MainController mainController;
 
-    public FileManager(AsyncFileIO fileIO) {
+    public WorkspaceManager(AsyncFileIO fileIO) {
         this.fileIO = fileIO;
     }
 
