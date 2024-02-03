@@ -13,6 +13,8 @@ public class StageManager {
 
     public StageManager(Stage stage) {
         this.stage = stage;
+        stage.setWidth(700);
+        stage.setHeight(500);
         setupIcons();
     }
 
