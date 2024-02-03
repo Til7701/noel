@@ -1,10 +1,13 @@
 package de.holube.noel.fx.controller;
 
+import de.holube.noel.fx.PlatformExt;
 import de.holube.noel.fx.StageManager;
 import de.holube.noel.fx.view.MainView;
-import de.holube.noel.model.FileManager;
 import de.holube.noel.model.FileModel;
+import de.holube.noel.model.FolderModel;
+import de.holube.noel.model.WorkspaceManager;
 import javafx.application.Platform;
+import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -13,9 +16,14 @@ public class MainController {
     private final MainView mainView;
 
     private final StageManager stageManager;
-    private final FileManager fileManager;
+    private final WorkspaceManager workspaceManager;
 
+    private final FolderController folderController;
     private final EditorController editorController;
+
+    public void syncModels() {
+        PlatformExt.runAndWait(editorController::updateFileModel);
+    }
 
     public void setFile(FileModel fileModel) {
         Platform.runLater(() -> {
@@ -24,8 +32,29 @@ public class MainController {
         });
     }
 
-    public void saveCurrentFile() {
-        fileManager.saveFile(editorController.getFileModel());
+    public void saveFiles() {
+        Platform.runLater(() -> {
+            syncModels();
+            workspaceManager.saveFiles(); // TODO handle fail
+        });
+    }
+
+    public void closeFile(FileModel fileModel) {
+        Platform.runLater(() -> {
+            stageManager.setTitle("NoEl");
+            editorController.closeFile();
+        });
+    }
+
+    public void setFolderModel(FolderModel folderModel) {
+        TreeItem<FolderModel> root = folderModel.createTreeItem();
+        Platform.runLater(() ->
+                folderController.setFolderModel(root)
+        );
+    }
+
+    public void closeAllFiles() {
+        closeFile(null);
     }
 
 }

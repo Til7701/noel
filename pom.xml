@@ -6,7 +6,7 @@
 
     <groupId>de.holube</groupId>
     <artifactId>noel</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
         <!-- build -->
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.compiler.release>19</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <compiler.maven.plugin.version>3.12.1</compiler.maven.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -185,10 +185,10 @@
                         <configuration>
                             <name>NoEl</name>
                             <vendor>Tilman</vendor>
-                            <mainJar>noel.jar</mainJar>
-                            <input>target/input</input>
-                            <temp>target/tmp</temp>
-                            <destination>target/dist</destination>
+                            <mainJar>noel-${project.version}.jar</mainJar>
+                            <mainClass>de.holube.noel.Launcher</mainClass>
+                            <input>target/</input>
+                            <destination>./dist</destination>
                             <resourceDir>./jpackage</resourceDir>
                             <javaOptions>
                                 <option>-Dfile.encoding=UTF-8</option>

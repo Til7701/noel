@@ -7,14 +7,8 @@
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="${appenderPatternLayout}"/>
         </Console>
-        <File name="LogToFile" fileName="logs/noel.log" immediateFlush="false" append="false">
-            <PatternLayout pattern="${appenderPatternLayout}"/>
-        </File>
     </Appenders>
     <Loggers>
-        <Logger name="de.holube.noel" level="${sys:logging.level:-info}">
-            <AppenderRef ref="LogToFile"/>
-        </Logger>
         <Root level="debug">
             <AppenderRef ref="LogToConsole"/>
         </Root>
