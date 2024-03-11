@@ -25,7 +25,7 @@
 
         <compiler.maven.plugin.version>3.12.1</compiler.maven.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
-        <jpackage.maven.plugin.version>1.6.0</jpackage.maven.plugin.version>
+        <jpackage.maven.plugin.version>1.6.3</jpackage.maven.plugin.version>
         <assembly.maven.plugin.version>3.6.0</assembly.maven.plugin.version>
     </properties>
 
