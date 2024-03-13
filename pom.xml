@@ -16,7 +16,7 @@
         <lombok.version>1.18.30</lombok.version>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.10.0</mockito.version>
-        <log4j.version>2.23.0</log4j.version>
+        <log4j.version>2.23.1</log4j.version>
 
         <!-- build -->
         <maven.compiler.source>21</maven.compiler.source>
