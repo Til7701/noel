@@ -3,9 +3,11 @@ package de.holube.noel;
 import de.holube.noel.fx.StageManager;
 import de.holube.noel.fx.ViewControllerInitializer;
 import de.holube.noel.fx.controller.MainController;
+import de.holube.noel.fx.view.EditorView;
 import de.holube.noel.fx.view.MainView;
 import de.holube.noel.io.AsyncFileIO;
 import de.holube.noel.model.WorkspaceManager;
+import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -28,9 +30,10 @@ public class NoelApplication extends Application {
     private static final Semaphore startupLock = new Semaphore(0);
 
     private MainController mainController;
+    private EditorView editorView;
 
     public static void main(String[] args) {
-        log.debug("Started with args: " + Arrays.toString(args));
+        log.debug("Started with args: {}", Arrays.toString(args));
 
         if (args.length > 0) {
             fileIO.loadFile(args[0], fileModel -> {
@@ -47,12 +50,14 @@ public class NoelApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        CSSFX.start();
         final StageManager stageManager = new StageManager(primaryStage);
 
         final ViewControllerInitializer initializer = new ViewControllerInitializer(stageManager, WORKSPACE_MANAGER);
         final MainView mainView = initializer.getMainView();
         mainController = initializer.getMainController();
         WORKSPACE_MANAGER.setMainController(mainController);
+        editorView = initializer.getEditorView();
 
         final Scene scene = new Scene(mainView, Screen.getPrimary().getBounds().getWidth() * 0.7D, Screen.getPrimary().getBounds().getHeight() * 0.7D);
         setupShortcuts(scene);
@@ -73,6 +78,7 @@ public class NoelApplication extends Application {
     @Override
     public void stop() {
         fileIO.close();
+        editorView.close();
     }
 
 }

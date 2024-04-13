@@ -1,6 +1,6 @@
 package de.holube.noel.fx.controller;
 
-import de.holube.noel.fx.view.EditorView;
+import de.holube.noel.fx.view.*;
 import de.holube.noel.model.FileModel;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +16,17 @@ public class EditorController {
     }
 
     void setFileModel(FileModel fileModel) {
+        if (this.fileModel == null || !this.fileModel.getFileType().equals(fileModel.getFileType())) {
+            editorView.getCodeArea().close();
+            SpecialEditorView newCodeArea = switch (fileModel.getFileType()) {
+                case MARKDOWN -> new MarkdownEditorView();
+                case JAVA -> new JavaEditorView();
+                case OTHER -> new DefaultEditorView();
+            };
+            editorView.setCodeArea(newCodeArea);
+        } else {
+            editorView.getCodeArea().clear();
+        }
         editorView.getCodeArea().replaceText(fileModel.getContent());
         this.fileModel = fileModel;
     }

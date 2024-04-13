@@ -28,6 +28,8 @@ public class FileModel {
      */
     private boolean changed = false;
 
+    private FileType fileType;
+
 
     public FileModel(String path, String content) {
         writeLock.lock();
@@ -35,6 +37,7 @@ public class FileModel {
         this.content = content;
         this.read = true;
         writeLock.unlock();
+        fileType = FileType.of(path);
     }
 
     public String getPath() {
@@ -84,6 +87,21 @@ public class FileModel {
         } finally {
             readLock.unlock();
         }
+    }
+
+    public FileType getFileType() {
+        readLock.lock();
+        try {
+            return fileType;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    public void setFileType(FileType fileType) {
+        writeLock.lock();
+        this.fileType = fileType;
+        writeLock.unlock();
     }
 
 }

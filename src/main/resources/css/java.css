@@ -1,0 +1,11 @@
+.keyword {
+    -fx-fill: #ff6a00;
+}
+
+.string {
+    -fx-fill: #00b200;
+}
+
+.comment {
+    -fx-fill: #00ff93;
+}

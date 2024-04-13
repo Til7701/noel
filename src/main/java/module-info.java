@@ -5,6 +5,8 @@ module noel {
     requires java.desktop;
     requires org.slf4j;
     requires org.fxmisc.richtext;
+    requires fr.brouillard.oss.cssfx;
+    requires reactfx;
 
     exports de.holube.noel;
 }

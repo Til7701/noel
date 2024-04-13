@@ -30,7 +30,7 @@ public class WorkspaceManager {
     }
 
     public void openFile(FileModel fileModel) {
-        log.debug("Opening file: " + fileModel.getPath());
+        log.debug("Opening file: {}", fileModel.getPath());
         writeLock.lock();
         try {
             openFiles.put(fileModel.getPath(), fileModel);
@@ -74,7 +74,7 @@ public class WorkspaceManager {
     }
 
     public void closeFile(FileModel fileModel) {
-        log.debug("Closing file: " + fileModel.getPath());
+        log.debug("Closing file: {}", fileModel.getPath());
         writeLock.lock();
         try {
             openFiles.remove(fileModel.getPath(), fileModel);

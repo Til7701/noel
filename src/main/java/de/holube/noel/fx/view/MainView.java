@@ -26,7 +26,9 @@ public class MainView extends AnchorPane {
 
         splitPane.getItems().addAll(folderView, editorView);
         splitPane.setDividerPosition(0, 0.2D);
+        SplitPane.setResizableWithParent(folderView, false);
 
+        this.getStyleClass().add("root");
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
     }
 
