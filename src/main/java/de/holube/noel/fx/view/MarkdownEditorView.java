@@ -6,12 +6,10 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.Subscription;
+import org.reactfx.util.Tuple2;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -26,11 +24,12 @@ public class MarkdownEditorView extends SpecialEditorView {
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<BOLD>" + BOLD_PATTERN + ")" +
-                    "|(?<ITALIC>" + ITALIC_PATTERN + ")"
+                    "|(?<ITALIC>" + ITALIC_PATTERN + ")" +
+                    "|(?<H1>" + H1_PATTERN + ")"
     );
 
     private static final String[] PATTERN_GROUPS = {
-            "BOLD", "ITALIC"
+            "BOLD", "ITALIC", "H1"
     };
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor(r -> Thread.ofVirtual().unstarted(r));
@@ -59,49 +58,35 @@ public class MarkdownEditorView extends SpecialEditorView {
     }
 
     @Override
-    protected StyleSpans<Collection<String>> computeHighlightingSpans(String text) {
+    protected Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>> computeHighlightingSpans(String text) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        StyleSpansBuilder<Collection<String>> spansBuilderH1 = new StyleSpansBuilder<>();
         Matcher matcher = getPattern().matcher(text);
         int lastKwEnd = 0;
         while (matcher.find()) {
             String styleClass = getStyleClassForGroup(matcher);
             spansBuilder.add(Collections.singleton(DEFAULT_TEXT_STYLE_CLASS), matcher.start() - lastKwEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            if (styleClass.equals("H1")) {
+                spansBuilderH1.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            } else {
+                spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            }
             lastKwEnd = matcher.end();
         }
         spansBuilder.add(Collections.singleton(DEFAULT_TEXT_STYLE_CLASS), text.length() - lastKwEnd);
-        return spansBuilder.create();
+        return null;
     }
 
-    private String getStyleClassForGroup(Matcher matcher) {
-        for (String group : getPatternGroups()) {
-            if (matcher.group(group) != null) {
-                return group.toLowerCase();
-            }
-        }
-        return "";
-    }
-
-    private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
+    private Task<Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>>> computeHighlightingAsync() {
         String text = this.getText();
-        Task<StyleSpans<Collection<String>>> task = new Task<>() {
+        Task<Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>>> task = new Task<>() {
             @Override
-            protected StyleSpans<Collection<String>> call() {
+            protected Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>> call() {
                 return computeHighlightingSpans(text);
             }
         };
         executor.execute(task);
         return task;
-    }
-
-    @Override
-    protected void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
-        this.setStyleSpans(0, highlighting);
-        int currentParagraph = this.getCurrentParagraph();
-        if (this.getParagraph(currentParagraph).getText().matches(H1_PATTERN)) {
-            System.out.println(this.getParagraph(currentParagraph).getText());
-            this.setParagraphStyle(currentParagraph, Collections.singleton("headingone"));
-        }
     }
 
     @Override

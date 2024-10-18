@@ -3,9 +3,11 @@ package de.holube.noel.fx.view;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+import org.reactfx.util.Tuple2;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +15,7 @@ public abstract class SpecialEditorView extends CodeArea {
 
     protected static final String DEFAULT_TEXT_STYLE_CLASS = "noel-text";
 
-    protected StyleSpans<Collection<String>> computeHighlightingSpans(String text) {
+    protected Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>> computeHighlightingSpans(String text) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
         Matcher matcher = getPattern().matcher(text);
         int lastKwEnd = 0;
@@ -24,10 +26,10 @@ public abstract class SpecialEditorView extends CodeArea {
             lastKwEnd = matcher.end();
         }
         spansBuilder.add(Collections.singleton(DEFAULT_TEXT_STYLE_CLASS), text.length() - lastKwEnd);
-        return spansBuilder.create();
+        return List.of(spansBuilder.create());
     }
 
-    private String getStyleClassForGroup(Matcher matcher) {
+    protected String getStyleClassForGroup(Matcher matcher) {
         for (String group : getPatternGroups()) {
             if (matcher.group(group) != null) {
                 return group.toLowerCase();
@@ -36,8 +38,10 @@ public abstract class SpecialEditorView extends CodeArea {
         return "";
     }
 
-    protected void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
-        this.setStyleSpans(0, highlighting);
+    protected void applyHighlighting(Tuple2<List<StyleSpans<Collection<String>>>, List<Integer>> highlighting) {
+        for (int i = 0; i < highlighting._1.size(); i++) {
+            this.setStyleSpans(highlighting._2.get(i), highlighting._1.get(i));
+        }
     }
 
     public void close() {
